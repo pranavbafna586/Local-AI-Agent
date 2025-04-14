@@ -2,6 +2,10 @@
 
 LokAI is an intelligent document question-answering platform that allows users to upload documents in various formats (PDF, Word, Excel, and images) and ask questions about their content. The application uses advanced AI technology from GROQ to provide accurate answers based on the document content.
 
+## UI Preview
+
+![LokAI User Interface](./image.png)
+
 ## Features
 
 - **Multiple Document Format Support**: Upload PDF, Word documents, Excel spreadsheets, and images
