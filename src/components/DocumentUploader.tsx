@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { extractTextFromDocument } from "@/utils/documentUtils";
+import { Upload, FileText, X, AlertCircle, FileUp } from "lucide-react";
 
 interface DocumentUploaderProps {
   selectedFile: File | null;
@@ -21,6 +22,13 @@ export default function DocumentUploader({
 }: DocumentUploaderProps) {
   const [fileError, setFileError] = useState<string>("");
   const [extractionProgress, setExtractionProgress] = useState<number>(0);
+
+  // Automatically process the file when it's selected
+  useEffect(() => {
+    if (selectedFile && !isProcessing) {
+      extractTextFromFile();
+    }
+  }, [selectedFile]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -111,7 +119,10 @@ export default function DocumentUploader({
 
   return (
     <div className="card h-full flex flex-col">
-      <h2 className="text-xl font-semibold mb-4">Upload Documents</h2>
+      <h2 className="text-xl font-semibold mb-4 flex items-center text-primary-800">
+        <FileUp className="w-5 h-5 mr-2 text-primary-600" />
+        Upload Documents
+      </h2>
 
       <div
         {...getRootProps()}
@@ -124,22 +135,12 @@ export default function DocumentUploader({
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center">
-          <svg
-            className="w-10 h-10 text-gray-400 mb-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            />
-          </svg>
+          <Upload className="w-10 h-10 text-primary-400 mb-3" />
 
           {isDragActive ? (
-            <p className="text-primary-600">Drop your file here...</p>
+            <p className="text-primary-600 font-medium">
+              Drop your file here...
+            </p>
           ) : (
             <>
               <p className="text-gray-700">
@@ -155,28 +156,17 @@ export default function DocumentUploader({
       </div>
 
       {fileError && (
-        <div className="bg-red-50 text-red-500 p-3 rounded-md mb-4">
-          {fileError}
+        <div className="bg-red-50 text-red-500 p-3 rounded-md mb-4 flex items-start border border-red-200">
+          <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+          <p>{fileError}</p>
         </div>
       )}
 
       {selectedFile && (
-        <div className="mb-4">
+        <div className="mb-4 bg-gray-50 rounded-lg p-3 border border-gray-200">
           <div className="flex items-start space-x-3">
-            <div className="bg-gray-100 p-2 rounded">
-              <svg
-                className="w-8 h-8 text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
+            <div className="bg-primary-50 p-2 rounded-lg">
+              <FileText className="w-8 h-8 text-primary-500" />
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-sm font-medium text-gray-900 truncate">
@@ -187,35 +177,28 @@ export default function DocumentUploader({
               </p>
             </div>
             <button
-              onClick={() => setSelectedFile(null)}
-              className="text-gray-400 hover:text-gray-500"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedFile(null);
+                setExtractedText("");
+              }}
+              className="text-gray-400 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-gray-100"
+              aria-label="Remove file"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
       )}
 
       {isProcessing && (
-        <div className="mb-4">
-          <p className="text-sm font-medium text-gray-700 mb-1">
+        <div className="mb-4 bg-blue-50 rounded-lg p-4 border border-primary-100">
+          <p className="text-sm font-medium text-primary-700 mb-2">
             Extracting text... {extractionProgress}%
           </p>
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
+          <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
             <div
-              className="bg-primary-600 h-2.5 rounded-full"
+              className="bg-primary-600 h-2.5 rounded-full transition-all duration-300"
               style={{ width: `${extractionProgress}%` }}
             ></div>
           </div>
@@ -223,20 +206,9 @@ export default function DocumentUploader({
       )}
 
       <div className="mt-auto">
-        <button
-          onClick={extractTextFromFile}
-          disabled={!selectedFile || isProcessing}
-          className={`w-full ${
-            !selectedFile || isProcessing
-              ? "bg-gray-300 cursor-not-allowed text-gray-500"
-              : "btn-primary"
-          }`}
-        >
-          {isProcessing ? "Processing..." : "Process Document"}
-        </button>
-
-        <p className="text-xs text-gray-500 text-center mt-3">
-          Upload your document and process it to start asking questions
+        <p className="text-xs text-gray-500 text-center mt-3 flex items-center justify-center">
+          <span className="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>
+          Documents are automatically processed when uploaded
         </p>
       </div>
     </div>
