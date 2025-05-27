@@ -1,69 +1,96 @@
-# LokAI - Document Q&A Platform
+# PDF AI Assistant
 
-LokAI is an intelligent document question-answering platform that allows users to upload documents in various formats (PDF, Word, Excel, and images) and ask questions about their content. The application uses advanced AI technology from GROQ to provide accurate answers based on the document content.
+A modern application that allows you to chat with your PDF documents using Google's Gemini AI. Upload multiple PDFs and ask questions to get instant, accurate answers based on the document content.
 
-## UI Preview
+![PDF AI Assistant Interface](image.png)
 
-![LokAI User Interface](./image.png)
+## ✨ Features
 
-## Features
+- **Document Processing**: Upload and process multiple PDF documents
+- **AI-Powered Q&A**: Ask questions about your documents and receive instant answers
+- **Modern UI**: Clean, dark-mode interface with intuitive design
+- **Conversation History**: Keep track of your conversation with the AI
+- **Local Processing**: Documents are processed locally for privacy
 
-- **Multiple Document Format Support**: Upload PDF, Word documents, Excel spreadsheets, and images
-- **OCR Technology**: Extract text from images using Tesseract OCR
-- **Interactive Chat Interface**: Ask questions about your documents and get AI-powered responses
-- **Modern UI**: Clean, professional, and responsive design using Tailwind CSS
-- **Real-time Processing**: See the progress of document processing in real-time
-
-## Technology Stack
-
-- **Frontend**: Next.js with TypeScript
-- **Styling**: Tailwind CSS
-- **AI Integration**: GROQ API
-- **Document Processing**:
-  - PDF parsing with pdf.js
-  - Word document parsing with mammoth.js
-  - Excel parsing with xlsx.js
-  - Image OCR with Tesseract.js
-
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- npm (v9 or higher)
+- Python 3.8 or higher
+- Git
 
 ### Installation
 
-1. Clone the repository
+1. **Clone the repository**
 
-```bash
-git clone https://github.com/yourusername/lokai.git
-cd lokai
-```
+   ```bash
+   git clone https://github.com/yourusername/Local-AI-Agent.git
+   cd Local-AI-Agent
+   ```
 
-2. Install dependencies
+2. **Create a virtual environment**
 
-```bash
-npm install
-```
+   ```bash
+   python -m venv venv
+   ```
 
-3. Create a `.env.local` file in the root directory and add your GROQ API key:
+3. **Activate the virtual environment**
 
-```
-NEXT_PUBLIC_GROQ_API_KEY=your_groq_api_key
-```
+   - Windows:
 
-4. Start the development server
+     ```bash
+     venv\Scripts\activate
+     ```
 
-```bash
-npm run dev
-```
+   - macOS/Linux:
+     ```bash
+     source venv/bin/activate
+     ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+4. **Install dependencies**
 
-## Usage
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-1. Upload a document using the document uploader.
-2. Click "Process Document" to extract text from the document.
-3. Once processing is complete, ask questions about the document in the chat interface.
-4. Get AI-powered responses based on the content of your document.
+5. **Set up environment variables**
+
+   Create a `.env` file in the project root directory with the following variables:
+
+   ```
+   GOOGLE_API_KEY=your_gemini_api_key
+   HUGGINGFACEHUB_API_TOKEN=your_huggingface_token
+   ```
+
+   To get these API keys:
+
+   - Get a Google Gemini API key from [Google AI Studio](https://ai.google.dev/)
+   - Get a HuggingFace API token from [HuggingFace](https://huggingface.co/settings/tokens)
+
+## 🔧 Usage
+
+1. **Start the application**
+
+   ```bash
+   streamlit run app.py
+   ```
+
+2. **Access the application**
+
+   Open your web browser and go to `http://localhost:8501`
+
+3. **Using the application**
+
+   - Upload PDF documents using the sidebar
+   - Click "Process Documents" to analyze the content
+   - Ask questions about your documents in the chat interface
+   - Receive AI-generated answers based on the document content
+
+## 📋 Dependencies
+
+- **Streamlit**: Web application framework
+- **LangChain**: Framework for LLM applications
+- **Google Gemini API**: AI language model
+- **HuggingFace**: Embeddings for document processing
+- **PyPDF2**: PDF parsing library
+- **FAISS**: Vector database for document storage and retrieval
