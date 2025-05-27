@@ -24,7 +24,7 @@ A modern application that allows you to chat with your PDF documents using Googl
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/Local-AI-Agent.git
+   git clone https://github.com/pranavbafna586/PDF_AI_Assistant.git
    cd Local-AI-Agent
    ```
 
